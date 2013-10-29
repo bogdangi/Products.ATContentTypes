@@ -19,6 +19,8 @@ from Products.ATContentTypes.permission import ChangeTopics
 from archetypes.referencebrowserwidget import ReferenceBrowserWidget
 
 from Products.ATContentTypes import ATCTMessageFactory as _
+from plone.app.uuid.utils import uuidToObject
+
 
 ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
     ReferenceField('value',
@@ -78,7 +80,7 @@ class ATPathCriterion(ATBaseCriterion):
     def getCriteriaItems(self):
         result = []
         depth = (not self.Recurse() and 1) or -1
-        paths = ['/'.join(o.getPhysicalPath()) for o in self.Value() if o is not None]
+        paths = ['/'.join(uuidToObject(o).getPhysicalPath()) for o in self.Value() if uuidToObject(o) is not None]
 
         if paths is not '':
             result.append((self.Field(), {'query': paths, 'depth': depth}))
